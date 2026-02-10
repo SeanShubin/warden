@@ -1,0 +1,12 @@
+{
+  "baseDir": "..",
+  "projectGeneratorPath": "project-generator/console/target/project-generator-console.jar",
+  "projects": [
+    "project-generator",
+    "kotlin-reusable",
+    "jvmspec",
+    "code-structure",
+    "inversion-guard",
+    "build-warden"
+  ]
+}

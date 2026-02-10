@@ -1,0 +1,106 @@
+{
+  "prefix": [
+    "com",
+    "seanshubin"
+  ],
+  "name": [
+    "build",
+    "warden"
+  ],
+  "description": "Build Warden - Takes custody of projects, regenerates builds, verifies, and checks git status",
+  "version": "0.1.0",
+  "language": "kotlin",
+  "developer": {
+    "name": "Sean Shubin",
+    "githubName": "SeanShubin",
+    "mavenUserName": "SeanShubin",
+    "organization": "Sean Shubin",
+    "url": "http://seanshubin.com/"
+  },
+  "global": [
+    "stdlib",
+    "test"
+  ],
+  "dependencies": {
+    "stdlib": {
+      "group": "org.jetbrains.kotlin",
+      "artifact": "kotlin-stdlib-jdk8"
+    },
+    "test": {
+      "group": "org.jetbrains.kotlin",
+      "artifact": "kotlin-test-junit",
+      "scope": "test"
+    },
+    "jackson": {
+      "group": "com.fasterxml.jackson.module",
+      "artifact": "jackson-module-kotlin"
+    },
+    "jackson-time": {
+      "group": "com.fasterxml.jackson.datatype",
+      "artifact": "jackson-datatype-jsr310"
+    }
+  },
+  "versionOverrides": [
+  ],
+  "modules": {
+    "console": [
+      "composition"
+    ],
+    "composition": [
+      "domain",
+      "project-finder",
+      "build-executor",
+      "git-checker",
+      "reporter",
+      "di-contract",
+      "dynamic-json"
+    ],
+    "domain": [],
+    "project-finder": [
+      "domain",
+      "di-contract"
+    ],
+    "build-executor": [
+      "domain",
+      "di-contract"
+    ],
+    "git-checker": [
+      "domain",
+      "di-contract"
+    ],
+    "reporter": [
+      "domain",
+      "di-contract"
+    ],
+    "dynamic-core": [],
+    "dynamic-json": [
+      "dynamic-core",
+      "di-delegate",
+      "jackson",
+      "jackson-time"
+    ],
+    "di-contract": [],
+    "di-delegate": [
+      "di-contract"
+    ],
+    "di-test": [
+      "di-contract"
+    ]
+  },
+  "javaVersion": "25",
+  "entryPoints": {
+    "console": "com.seanshubin.build.warden.console.EntryPoint"
+  },
+  "sourceDependencies": [
+    {
+      "sourceProjectPath": "../kotlin-reusable",
+      "moduleMapping": {
+        "dynamic-core": "dynamic-core",
+        "dynamic-json": "dynamic-json",
+        "di-contract": "di-contract",
+        "di-delegate": "di-delegate",
+        "di-test": "di-test"
+      }
+    }
+  ]
+}
