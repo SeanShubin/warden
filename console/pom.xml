@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>build-warden-console</artifactId>
+    <artifactId>warden-console</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.seanshubin.build.warden</groupId>
-            <artifactId>build-warden-composition</artifactId>
+            <groupId>com.seanshubin.warden</groupId>
+            <artifactId>warden-composition</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
     <parent>
-        <groupId>com.seanshubin.build.warden</groupId>
-        <artifactId>build-warden-parent</artifactId>
+        <groupId>com.seanshubin.warden</groupId>
+        <artifactId>warden-parent</artifactId>
         <version>0.1.0</version>
     </parent>
     <name>${project.groupId}:${project.artifactId}</name>
@@ -22,14 +22,14 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <finalName>build-warden-console</finalName>
+                    <finalName>warden-console</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.seanshubin.build.warden.console.EntryPoint</mainClass>
+                            <mainClass>com.seanshubin.warden.console.EntryPoint</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

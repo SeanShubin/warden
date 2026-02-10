@@ -4,7 +4,7 @@
 set -e -u -o pipefail
 
 # make sure we don't inherit any state from our local repository
-rm -rf ~/.m2/repository/com/seanshubin/build/warden/
+rm -rf ~/.m2/repository/com/seanshubin/warden/
 
 # make sure we don't inherit any state from previous runs
 mvn clean

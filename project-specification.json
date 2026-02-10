@@ -4,7 +4,6 @@
     "seanshubin"
   ],
   "name": [
-    "build",
     "warden"
   ],
   "description": "Build Warden - Takes custody of projects, regenerates builds, verifies, and checks git status",
@@ -89,7 +88,7 @@
   },
   "javaVersion": "25",
   "entryPoints": {
-    "console": "com.seanshubin.build.warden.console.EntryPoint"
+    "console": "com.seanshubin.warden.console.EntryPoint"
   },
   "sourceDependencies": [
     {

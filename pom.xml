@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.seanshubin.build.warden</groupId>
-    <artifactId>build-warden-parent</artifactId>
+    <groupId>com.seanshubin.warden</groupId>
+    <artifactId>warden-parent</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
     <dependencies>
@@ -137,7 +137,7 @@
     </build>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Build Warden - Takes custody of projects, regenerates builds, verifies, and checks git status</description>
-    <url>https://github.com/SeanShubin/build-warden</url>
+    <url>https://github.com/SeanShubin/warden</url>
     <licenses>
         <license>
             <name>Unlicense</name>
@@ -152,9 +152,9 @@
         </developer>
     </developers>
     <scm>
-        <connection>git@github.com:SeanShubin/build-warden.git</connection>
-        <developerConnection>git@github.com:SeanShubin/build-warden.git</developerConnection>
-        <url>https://github.com/SeanShubin/build-warden</url>
+        <connection>git@github.com:SeanShubin/warden.git</connection>
+        <developerConnection>git@github.com:SeanShubin/warden.git</developerConnection>
+        <url>https://github.com/SeanShubin/warden</url>
     </scm>
     <profiles>
         <profile>

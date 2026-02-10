@@ -10,7 +10,7 @@
   "outputDir" : "generated/code-structure",
   "useObservationsCache" : false,
   "includeJvmDynamicInvocations" : false,
-  "sourcePrefix" : "https://github.com/SeanShubin/build-warden/blob/master/",
+  "sourcePrefix" : "https://github.com/SeanShubin/warden/blob/master/",
   "sourceFileRegexPatterns" : {
     "include" : [ ".*/src/main/(kotlin|java)/.*\\.(kt|java)" ],
     "exclude" : [ ]
