@@ -6,7 +6,7 @@
   "name": [
     "warden"
   ],
-  "description": "Build Warden - Takes custody of projects, regenerates builds, verifies, and checks git status",
+  "description": "Warden - Takes custody of projects, regenerates builds, verifies, and checks git status",
   "version": "0.1.0",
   "language": "kotlin",
   "developer": {
