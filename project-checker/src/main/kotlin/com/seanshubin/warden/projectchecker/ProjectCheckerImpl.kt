@@ -29,6 +29,9 @@ class ProjectCheckerImpl(
 
         // Check 3: Unpushed commits
         val unpushedResult = exec.exec(project.path, listOf("git", "log", "@{u}..HEAD", "--oneline"))
+        if (!unpushedResult.success && unpushedResult.output.contains("no upstream configured")) {
+            return ProjectStatus(project.path, ProjectStatus.Status.NoUpstream)
+        }
         if (unpushedResult.success && unpushedResult.output.trim().isNotEmpty()) {
             return ProjectStatus(project.path, ProjectStatus.Status.UnpushedCommits)
         }

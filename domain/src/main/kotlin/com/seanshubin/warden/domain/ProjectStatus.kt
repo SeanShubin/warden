@@ -11,6 +11,7 @@ data class ProjectStatus(
         data class BuildFailed(val output: String) : Status()
         data object PendingEdits : Status()
         data object UnpushedCommits : Status()
+        data object NoUpstream : Status()
     }
 
     val isClean: Boolean get() = status is Status.Clean

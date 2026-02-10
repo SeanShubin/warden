@@ -51,6 +51,11 @@ class Runner(
                     // Build passed, found pending edits
                     emitLine("edits?: ${project.path}")
                 }
+                is ProjectStatus.Status.NoUpstream -> {
+                    // Build passed, no edits, but no upstream configured
+                    emitLine("edits?: ${project.path}")
+                    emitLine("unpushed?: ${project.path}")
+                }
                 is ProjectStatus.Status.UnpushedCommits -> {
                     // Build passed, no edits, found unpushed
                     emitLine("edits?: ${project.path}")
@@ -69,6 +74,7 @@ class Runner(
                 is ProjectStatus.Status.BuildFailed -> "(verify failed)"
                 is ProjectStatus.Status.PendingEdits -> "(pending edits)"
                 is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
+                is ProjectStatus.Status.NoUpstream -> "(no upstream)"
             }
             emitLine("$statusText ${project.path}")
 
@@ -84,6 +90,7 @@ class Runner(
                 is ProjectStatus.Status.BuildFailed -> "(verify failed)"
                 is ProjectStatus.Status.PendingEdits -> "(pending edits)"
                 is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
+                is ProjectStatus.Status.NoUpstream -> "(no upstream)"
             }
             emitLine("$statusText ${project.path}")
         }
