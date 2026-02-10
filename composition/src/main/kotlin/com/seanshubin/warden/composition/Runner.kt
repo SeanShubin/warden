@@ -3,6 +3,7 @@ package com.seanshubin.warden.composition
 import com.seanshubin.warden.buildexecutor.BuildExecutor
 import com.seanshubin.warden.domain.Project
 import com.seanshubin.warden.domain.ProjectStatus
+import com.seanshubin.warden.format.DurationFormat
 import com.seanshubin.warden.projectchecker.ProjectChecker
 import com.seanshubin.warden.projectfinder.ProjectFinder
 import java.time.Clock
@@ -16,6 +17,8 @@ class Runner(
     private val projectChecker: ProjectChecker
 ) : Runnable {
     override fun run() {
+        val startMillis = clock.millis()
+
         val projects = projectFinder.findProjects(configuration.projects)
         val validProjects = projects.filter { it.isValid }
 
@@ -74,5 +77,10 @@ class Runner(
             }
             emitLine("$statusText ${project.path}")
         }
+
+        val endMillis = clock.millis()
+        val durationMillis = endMillis - startMillis
+        val durationText = DurationFormat.milliseconds.format(durationMillis)
+        emitLine("time taken: $durationText")
     }
 }

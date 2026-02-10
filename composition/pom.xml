@@ -33,6 +33,11 @@
             <artifactId>warden-dynamic-json</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.seanshubin.warden</groupId>
+            <artifactId>warden-format</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <parent>
         <groupId>com.seanshubin.warden</groupId>
