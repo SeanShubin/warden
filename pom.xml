@@ -141,7 +141,7 @@
         </plugins>
     </build>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Build Warden - Takes custody of projects, regenerates builds, verifies, and checks git status</description>
+    <description>Warden - Takes custody of projects, regenerates builds, verifies, and checks git status</description>
     <url>https://github.com/SeanShubin/warden</url>
     <licenses>
         <license>
