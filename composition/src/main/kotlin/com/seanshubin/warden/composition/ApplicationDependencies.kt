@@ -15,12 +15,13 @@ class ApplicationDependencies(
     private val emitLine = integrations.emitLine
     private val files = integrations.files
     private val exec = integrations.exec
+    private val parallelExecutor = integrations.parallelExecutor
 
     private val projectFinder: ProjectFinder = ProjectFinderImpl(files)
     private val buildExecutor: BuildExecutor = BuildExecutorImpl(exec)
     private val projectChecker: ProjectChecker = ProjectCheckerImpl(exec)
 
-    val runner: Runnable = Runner(clock, emitLine, configuration, projectFinder, buildExecutor, projectChecker)
+    val runner: Runnable = Runner(clock, emitLine, configuration, projectFinder, buildExecutor, projectChecker, parallelExecutor)
 
     companion object {
         fun fromConfiguration(integrations: Integrations, config: Configuration): Runnable {

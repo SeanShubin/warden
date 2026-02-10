@@ -1,6 +1,7 @@
 package com.seanshubin.warden.composition
 
 import com.seanshubin.warden.buildexecutor.BuildExecutor
+import com.seanshubin.warden.di.contract.ParallelExecutor
 import com.seanshubin.warden.domain.Project
 import com.seanshubin.warden.domain.ProjectStatus
 import com.seanshubin.warden.format.DurationFormat
@@ -14,7 +15,8 @@ class Runner(
     private val configuration: Configuration,
     private val projectFinder: ProjectFinder,
     private val buildExecutor: BuildExecutor,
-    private val projectChecker: ProjectChecker
+    private val projectChecker: ProjectChecker,
+    private val parallelExecutor: ParallelExecutor
 ) : Runnable {
     override fun run() {
         val startMillis = clock.millis()
@@ -30,9 +32,8 @@ class Runner(
             }
         }
 
-        // Process each valid project with progress messages
-        val results = mutableListOf<Pair<Project, ProjectStatus>>()
-        validProjects.forEach { project ->
+        // Process each valid project with progress messages (in parallel)
+        val results = parallelExecutor.execute(validProjects) { project ->
             // Regenerate build
             emitLine("regenerating: ${project.path}")
             buildExecutor.regenerateBuilds(configuration.projectGeneratorPath, listOf(project))
@@ -62,7 +63,16 @@ class Runner(
                 }
             }
 
-            results.add(project to status)
+            // Show completion status
+            val statusText = when (status.status) {
+                is ProjectStatus.Status.Clean -> "(ok)"
+                is ProjectStatus.Status.BuildFailed -> "(verify failed)"
+                is ProjectStatus.Status.PendingEdits -> "(pending edits)"
+                is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
+            }
+            emitLine("$statusText ${project.path}")
+
+            project to status
         }
 
         // Results summary

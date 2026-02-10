@@ -37,6 +37,10 @@
     "jackson-time": {
       "group": "com.fasterxml.jackson.datatype",
       "artifact": "jackson-datatype-jsr310"
+    },
+    "coroutines": {
+      "group": "org.jetbrains.kotlinx",
+      "artifact": "kotlinx-coroutines-core"
     }
   },
   "versionOverrides": [
@@ -76,7 +80,8 @@
     ],
     "di-contract": [],
     "di-delegate": [
-      "di-contract"
+      "di-contract",
+      "coroutines"
     ],
     "di-test": [
       "di-contract"
