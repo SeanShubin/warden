@@ -46,8 +46,7 @@
         <module>domain</module>
         <module>project-finder</module>
         <module>build-executor</module>
-        <module>git-checker</module>
-        <module>reporter</module>
+        <module>project-checker</module>
         <module>dynamic-core</module>
         <module>dynamic-json</module>
         <module>di-contract</module>

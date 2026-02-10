@@ -20,12 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.warden</groupId>
-            <artifactId>warden-git-checker</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.seanshubin.warden</groupId>
-            <artifactId>warden-reporter</artifactId>
+            <artifactId>warden-project-checker</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -49,8 +49,7 @@
       "domain",
       "project-finder",
       "build-executor",
-      "git-checker",
-      "reporter",
+      "project-checker",
       "di-contract",
       "dynamic-json"
     ],
@@ -63,11 +62,7 @@
       "domain",
       "di-contract"
     ],
-    "git-checker": [
-      "domain",
-      "di-contract"
-    ],
-    "reporter": [
+    "project-checker": [
       "domain",
       "di-contract"
     ],

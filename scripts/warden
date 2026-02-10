@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Warden - Build guardian for multi-project environments
+# Runs from the warden project root directory
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+JAR_PATH="$PROJECT_ROOT/console/target/warden-console.jar"
+
+if [ ! -f "$JAR_PATH" ]; then
+    echo "Error: warden-console.jar not found at $JAR_PATH"
+    echo "Run 'mvn package' to build the jar"
+    exit 1
+fi
+
+java -jar "$JAR_PATH" "$@"

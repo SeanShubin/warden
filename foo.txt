@@ -1,0 +1,17 @@
+regenerating: project-generator
+verifying: project-generator
+edits?: project-generator
+unpushed commits?: project-generator
+regenerating: kotlin-reusable
+verifying: kotlin-reusable
+edits?: kotlin-reusable
+unpushed commits?: kotlin-reusable
+...
+
+---------- results ----------
+(ok) project-generator
+(unpushed commits) kotlin-reusable
+(pending edits) jvmspec
+(verify failed) code-structure
+(ok) inversion-guard
+(ok) warden
