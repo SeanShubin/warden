@@ -1,6 +1,7 @@
 package com.seanshubin.warden.composition
 
 import com.seanshubin.warden.buildexecutor.BuildExecutor
+import com.seanshubin.warden.domain.Project
 import com.seanshubin.warden.domain.ProjectStatus
 import com.seanshubin.warden.projectchecker.ProjectChecker
 import com.seanshubin.warden.projectfinder.ProjectFinder
@@ -15,115 +16,63 @@ class Runner(
     private val projectChecker: ProjectChecker
 ) : Runnable {
     override fun run() {
-        emitLine("Warden starting at ${clock.instant()}")
-        emitLine("Base directory: ${configuration.baseDir}")
-        emitLine("Project generator: ${configuration.projectGeneratorPath}")
-        emitLine("")
-
         val projects = projectFinder.findProjects(configuration.projects)
         val validProjects = projects.filter { it.isValid }
-        val invalidProjects = projects.filter { !it.isValid }
 
-        emitLine("Projects found: ${projects.size}")
-        emitLine("Valid: ${validProjects.size}, Invalid: ${invalidProjects.size}")
+        // Show invalid projects immediately
+        projects.filter { !it.isValid }.forEach { project ->
+            emitLine("(invalid) ${project.path}")
+            project.issues.forEach { issue ->
+                emitLine("  $issue")
+            }
+        }
+
+        // Process each valid project with progress messages
+        val results = mutableListOf<Pair<Project, ProjectStatus>>()
+        validProjects.forEach { project ->
+            // Regenerate build
+            emitLine("regenerating: ${project.path}")
+            buildExecutor.regenerateBuilds(configuration.projectGeneratorPath, listOf(project))
+
+            // Check status with progress messages
+            emitLine("verifying: ${project.path}")
+            val status = projectChecker.checkProjects(listOf(project)).first()
+
+            // Show what checks were done based on status
+            when (status.status) {
+                is ProjectStatus.Status.BuildFailed -> {
+                    // Build failed, didn't check git
+                }
+                is ProjectStatus.Status.PendingEdits -> {
+                    // Build passed, found pending edits
+                    emitLine("edits?: ${project.path}")
+                }
+                is ProjectStatus.Status.UnpushedCommits -> {
+                    // Build passed, no edits, found unpushed
+                    emitLine("edits?: ${project.path}")
+                    emitLine("unpushed?: ${project.path}")
+                }
+                is ProjectStatus.Status.Clean -> {
+                    // All checks passed
+                    emitLine("edits?: ${project.path}")
+                    emitLine("unpushed?: ${project.path}")
+                }
+            }
+
+            results.add(project to status)
+        }
+
+        // Results summary
         emitLine("")
-
-        if (validProjects.isNotEmpty()) {
-            emitLine("Valid projects:")
-            validProjects.forEach { project ->
-                emitLine("  ✓ ${project.path}")
+        emitLine("---------- results ----------")
+        results.forEach { (project, status) ->
+            val statusText = when (status.status) {
+                is ProjectStatus.Status.Clean -> "(ok)"
+                is ProjectStatus.Status.BuildFailed -> "(verify failed)"
+                is ProjectStatus.Status.PendingEdits -> "(pending edits)"
+                is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
             }
-            emitLine("")
-        }
-
-        if (invalidProjects.isNotEmpty()) {
-            emitLine("Invalid projects:")
-            invalidProjects.forEach { project ->
-                emitLine("  ✗ ${project.path}")
-                project.issues.forEach { issue ->
-                    emitLine("    - $issue")
-                }
-            }
-            emitLine("")
-        }
-
-        emitLine("Project finding complete")
-        emitLine("")
-
-        if (validProjects.isNotEmpty()) {
-            emitLine("Regenerating builds...")
-            val buildResults = buildExecutor.regenerateBuilds(configuration.projectGeneratorPath, projects)
-            val successfulBuilds = buildResults.filter { it.success }
-            val failedBuilds = buildResults.filter { !it.success }
-
-            emitLine("Builds regenerated: ${buildResults.size}")
-            emitLine("Successful: ${successfulBuilds.size}, Failed: ${failedBuilds.size}")
-            emitLine("")
-
-            if (successfulBuilds.isNotEmpty()) {
-                emitLine("Successful builds:")
-                successfulBuilds.forEach { result ->
-                    emitLine("  ✓ ${result.project}")
-                }
-                emitLine("")
-            }
-
-            if (failedBuilds.isNotEmpty()) {
-                emitLine("Failed builds:")
-                failedBuilds.forEach { result ->
-                    emitLine("  ✗ ${result.project}")
-                    emitLine("    ${result.output.lines().firstOrNull() ?: "Unknown error"}")
-                }
-                emitLine("")
-            }
-
-            emitLine("Build regeneration complete")
-            emitLine("")
-        }
-
-        if (validProjects.isNotEmpty()) {
-            emitLine("Checking project status (first error only)...")
-            val projectStatuses = projectChecker.checkProjects(projects)
-            val cleanProjects = projectStatuses.filter { it.isClean }
-            val projectsWithErrors = projectStatuses.filter { !it.isClean }
-
-            emitLine("Projects checked: ${projectStatuses.size}")
-            emitLine("Clean: ${cleanProjects.size}, With errors: ${projectsWithErrors.size}")
-            emitLine("")
-
-            if (cleanProjects.isNotEmpty()) {
-                emitLine("Clean projects:")
-                cleanProjects.forEach { status ->
-                    emitLine("  ✓ ${status.project}")
-                }
-                emitLine("")
-            }
-
-            if (projectsWithErrors.isNotEmpty()) {
-                emitLine("Projects with errors (showing first error only):")
-                projectsWithErrors.forEach { status ->
-                    emitLine("  ✗ ${status.project}")
-                    when (val statusType = status.status) {
-                        is ProjectStatus.Status.BuildFailed -> {
-                            emitLine("    Build verification failed (mvn clean verify)")
-                            val firstLine = statusType.output.lines().firstOrNull() ?: "Unknown error"
-                            emitLine("    $firstLine")
-                        }
-                        is ProjectStatus.Status.PendingEdits -> {
-                            emitLine("    Has uncommitted changes")
-                        }
-                        is ProjectStatus.Status.UnpushedCommits -> {
-                            emitLine("    Has unpushed commits")
-                        }
-                        is ProjectStatus.Status.Clean -> {
-                            // Should not happen in this branch
-                        }
-                    }
-                }
-                emitLine("")
-            }
-
-            emitLine("Project status check complete")
+            emitLine("$statusText ${project.path}")
         }
     }
 }
