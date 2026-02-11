@@ -10,9 +10,4 @@ class Bootstrap(
         val loader = ConfigurationLoader(integrations, configBaseName)
         return loader.load()
     }
-
-    fun loadConfiguration(configBaseName: String): Configuration {
-        val loader = ConfigurationLoader(integrations, configBaseName)
-        return loader.load()
-    }
 }

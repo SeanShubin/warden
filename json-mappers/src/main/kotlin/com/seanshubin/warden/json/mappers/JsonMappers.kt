@@ -1,4 +1,4 @@
-package com.seanshubin.warden.dynamic.json
+package com.seanshubin.warden.json.mappers
 
 import com.fasterxml.jackson.core.StreamReadFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 //
 // This file was imported from: ../kotlin-reusable
-// Module: dynamic-json
+// Module: json-mappers
 //
 // Before editing this file, consider whether updating the source project
 // and re-importing would be a better approach.

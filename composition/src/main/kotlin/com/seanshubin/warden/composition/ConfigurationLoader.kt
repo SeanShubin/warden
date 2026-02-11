@@ -1,6 +1,6 @@
 package com.seanshubin.warden.composition
 
-import com.seanshubin.warden.dynamic.json.JsonMappers
+import com.seanshubin.warden.json.mappers.JsonMappers
 import java.nio.file.Path
 import java.nio.file.Paths
 

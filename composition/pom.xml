@@ -30,7 +30,12 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.warden</groupId>
-            <artifactId>warden-dynamic-json</artifactId>
+            <artifactId>warden-di-delegate</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.warden</groupId>
+            <artifactId>warden-json-mappers</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

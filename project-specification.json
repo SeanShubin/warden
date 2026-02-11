@@ -55,7 +55,8 @@
       "build-executor",
       "project-checker",
       "di-contract",
-      "dynamic-json",
+      "di-delegate",
+      "json-mappers",
       "format"
     ],
     "domain": [],
@@ -71,10 +72,7 @@
       "domain",
       "di-contract"
     ],
-    "dynamic-core": [],
-    "dynamic-json": [
-      "dynamic-core",
-      "di-delegate",
+    "json-mappers": [
       "jackson",
       "jackson-time"
     ],
@@ -96,8 +94,7 @@
     {
       "sourceProjectPath": "../kotlin-reusable",
       "moduleMapping": {
-        "dynamic-core": "dynamic-core",
-        "dynamic-json": "dynamic-json",
+        "json-mappers": "json-mappers",
         "di-contract": "di-contract",
         "di-delegate": "di-delegate",
         "di-test": "di-test",
