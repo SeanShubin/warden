@@ -1,10 +1,18 @@
-package com.seanshubin.warden.di.delegate
+package com.seanshubin.warden.exec
 
-import com.seanshubin.warden.di.contract.Exec
 import com.seanshubin.warden.di.contract.ProcessBuilderContract
+import com.seanshubin.warden.di.delegate.ProcessBuilderDelegate
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.file.Path
+
+//
+// This file was imported from: ../kotlin-reusable
+// Module: exec
+//
+// Before editing this file, consider whether updating the source project
+// and re-importing would be a better approach.
+//
 
 class ExecImpl : Exec {
     override fun exec(workingDirectory: Path, command: List<String>): Exec.Result {

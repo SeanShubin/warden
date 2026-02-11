@@ -1,8 +1,8 @@
 package com.seanshubin.warden.projectchecker
 
-import com.seanshubin.warden.di.contract.Exec
 import com.seanshubin.warden.domain.Project
 import com.seanshubin.warden.domain.ProjectStatus
+import com.seanshubin.warden.exec.Exec
 
 class ProjectCheckerImpl(
     private val exec: Exec

@@ -1,8 +1,8 @@
 package com.seanshubin.warden.composition
 
-import com.seanshubin.warden.di.contract.Exec
 import com.seanshubin.warden.di.contract.FilesContract
-import com.seanshubin.warden.di.contract.ParallelExecutor
+import com.seanshubin.warden.exec.Exec
+import com.seanshubin.warden.parallel.ParallelExecutor
 import java.time.Clock
 
 interface Integrations {

@@ -1,11 +1,11 @@
 package com.seanshubin.warden.composition
 
-import com.seanshubin.warden.di.contract.Exec
 import com.seanshubin.warden.di.contract.FilesContract
-import com.seanshubin.warden.di.contract.ParallelExecutor
-import com.seanshubin.warden.di.delegate.ConcurrentParallelExecutor
-import com.seanshubin.warden.di.delegate.ExecImpl
 import com.seanshubin.warden.di.delegate.FilesDelegate
+import com.seanshubin.warden.exec.Exec
+import com.seanshubin.warden.exec.ExecImpl
+import com.seanshubin.warden.parallel.ConcurrentParallelExecutor
+import com.seanshubin.warden.parallel.ParallelExecutor
 import java.time.Clock
 
 class ProductionIntegrations(

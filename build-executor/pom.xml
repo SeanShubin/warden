@@ -10,7 +10,7 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.warden</groupId>
-            <artifactId>warden-di-contract</artifactId>
+            <artifactId>warden-exec</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

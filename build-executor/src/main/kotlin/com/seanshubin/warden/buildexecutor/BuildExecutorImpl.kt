@@ -1,7 +1,7 @@
 package com.seanshubin.warden.buildexecutor
 
-import com.seanshubin.warden.di.contract.Exec
 import com.seanshubin.warden.domain.Project
+import com.seanshubin.warden.exec.Exec
 import java.nio.file.Path
 
 class BuildExecutorImpl(

@@ -35,6 +35,16 @@
         </dependency>
         <dependency>
             <groupId>com.seanshubin.warden</groupId>
+            <artifactId>warden-exec</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.warden</groupId>
+            <artifactId>warden-parallel</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seanshubin.warden</groupId>
             <artifactId>warden-json-mappers</artifactId>
             <version>${project.version}</version>
         </dependency>

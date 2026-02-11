@@ -56,6 +56,8 @@
       "project-checker",
       "di-contract",
       "di-delegate",
+      "exec",
+      "parallel",
       "json-mappers",
       "format"
     ],
@@ -66,11 +68,11 @@
     ],
     "build-executor": [
       "domain",
-      "di-contract"
+      "exec"
     ],
     "project-checker": [
       "domain",
-      "di-contract"
+      "exec"
     ],
     "json-mappers": [
       "jackson",
@@ -83,6 +85,13 @@
     ],
     "di-test": [
       "di-contract"
+    ],
+    "exec": [
+      "di-contract",
+      "di-delegate"
+    ],
+    "parallel": [
+      "coroutines"
     ],
     "format": []
   },
@@ -98,6 +107,8 @@
         "di-contract": "di-contract",
         "di-delegate": "di-delegate",
         "di-test": "di-test",
+        "exec": "exec",
+        "parallel": "parallel",
         "format": "format"
       }
     }

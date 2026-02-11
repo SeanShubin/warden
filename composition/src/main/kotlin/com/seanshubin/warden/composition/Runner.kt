@@ -1,10 +1,10 @@
 package com.seanshubin.warden.composition
 
 import com.seanshubin.warden.buildexecutor.BuildExecutor
-import com.seanshubin.warden.di.contract.ParallelExecutor
 import com.seanshubin.warden.domain.Project
 import com.seanshubin.warden.domain.ProjectStatus
 import com.seanshubin.warden.format.DurationFormat
+import com.seanshubin.warden.parallel.ParallelExecutor
 import com.seanshubin.warden.projectchecker.ProjectChecker
 import com.seanshubin.warden.projectfinder.ProjectFinder
 import java.time.Clock
