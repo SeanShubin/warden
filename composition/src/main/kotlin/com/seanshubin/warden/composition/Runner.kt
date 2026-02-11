@@ -34,6 +34,8 @@ class Runner(
 
         // Process each valid project with progress messages (in parallel)
         val results = parallelExecutor.execute(validProjects) { project ->
+            val projectStartMillis = clock.millis()
+
             // Regenerate build
             emitLine("regenerating: ${project.path}")
             buildExecutor.regenerateBuilds(configuration.projectGeneratorPath, listOf(project))
@@ -68,7 +70,10 @@ class Runner(
                 }
             }
 
-            // Show completion status
+            // Show completion status with timing
+            val projectEndMillis = clock.millis()
+            val projectDurationMillis = projectEndMillis - projectStartMillis
+            val projectDurationText = DurationFormat.milliseconds.format(projectDurationMillis)
             val statusText = when (status.status) {
                 is ProjectStatus.Status.Clean -> "(ok)"
                 is ProjectStatus.Status.BuildFailed -> "(verify failed)"
@@ -76,15 +81,15 @@ class Runner(
                 is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
                 is ProjectStatus.Status.NoUpstream -> "(no upstream)"
             }
-            emitLine("$statusText ${project.path}")
+            emitLine("$statusText ${project.path} (time: $projectDurationText)")
 
-            project to status
+            Triple(project, status, projectDurationText)
         }
 
         // Results summary
         emitLine("")
         emitLine("---------- results ----------")
-        results.forEach { (project, status) ->
+        results.forEach { (project, status, durationText) ->
             val statusText = when (status.status) {
                 is ProjectStatus.Status.Clean -> "(ok)"
                 is ProjectStatus.Status.BuildFailed -> "(verify failed)"
@@ -92,7 +97,7 @@ class Runner(
                 is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
                 is ProjectStatus.Status.NoUpstream -> "(no upstream)"
             }
-            emitLine("$statusText ${project.path}")
+            emitLine("$statusText ${project.path} (time: $durationText)")
         }
 
         val endMillis = clock.millis()
