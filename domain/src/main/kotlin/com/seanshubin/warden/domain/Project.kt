@@ -1,15 +1,19 @@
 package com.seanshubin.warden.domain
 
 import java.nio.file.Path
+import java.time.Clock
 
-data class Project(
-    val path: Path,
-    val isValid: Boolean,
-    val issues: List<String>
-) {
-    companion object {
-        fun valid(path: Path): Project = Project(path, true, emptyList())
-        fun invalid(path: Path, vararg issues: String): Project =
-            Project(path, false, issues.toList())
-    }
+abstract class Project {
+    abstract val path: Path
+    abstract val isValid: Boolean
+    abstract val issues: List<String>
+
+    abstract fun process(
+        projectGeneratorPath: Path,
+        buildExecutor: BuildExecutor,
+        projectChecker: ProjectChecker,
+        clock: Clock,
+        emitLine: (String) -> Unit,
+        formatDuration: (Long) -> String
+    ): Triple<Project, ProjectStatus, String>
 }

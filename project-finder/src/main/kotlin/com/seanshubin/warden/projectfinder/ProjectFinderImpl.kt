@@ -5,13 +5,19 @@ import com.seanshubin.warden.domain.Project
 import java.nio.file.Path
 
 class ProjectFinderImpl(
-    private val files: FilesContract
+    private val files: FilesContract,
+    private val createCodeProject: (Path, Boolean, List<String>) -> Project,
+    private val createGitOnlyProject: (Path, Boolean, List<String>) -> Project
 ) : ProjectFinder {
     override fun findProjects(projectPaths: List<Path>): List<Project> {
-        return projectPaths.map { validateProject(it) }
+        return projectPaths.map { validateCodeProject(it) }
     }
 
-    private fun validateProject(projectPath: Path): Project {
+    override fun findGitOnlyProjects(projectPaths: List<Path>): List<Project> {
+        return projectPaths.map { validateGitOnlyProject(it) }
+    }
+
+    private fun validateCodeProject(projectPath: Path): Project {
         val issues = mutableListOf<String>()
 
         if (!files.exists(projectPath)) {
@@ -25,10 +31,18 @@ class ProjectFinderImpl(
             }
         }
 
-        return if (issues.isEmpty()) {
-            Project.valid(projectPath)
-        } else {
-            Project.invalid(projectPath, *issues.toTypedArray())
+        return createCodeProject(projectPath, issues.isEmpty(), issues)
+    }
+
+    private fun validateGitOnlyProject(projectPath: Path): Project {
+        val issues = mutableListOf<String>()
+
+        if (!files.exists(projectPath)) {
+            issues.add("Path does not exist: $projectPath")
+        } else if (!files.isDirectory(projectPath)) {
+            issues.add("Path is not a directory: $projectPath")
         }
+
+        return createGitOnlyProject(projectPath, issues.isEmpty(), issues)
     }
 }

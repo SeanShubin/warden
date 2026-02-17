@@ -1,6 +1,5 @@
-package com.seanshubin.warden.buildexecutor
+package com.seanshubin.warden.domain
 
-import com.seanshubin.warden.domain.Project
 import java.nio.file.Path
 
 interface BuildExecutor {

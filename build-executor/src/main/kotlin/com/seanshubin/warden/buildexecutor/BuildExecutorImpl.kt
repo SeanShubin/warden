@@ -1,5 +1,6 @@
 package com.seanshubin.warden.buildexecutor
 
+import com.seanshubin.warden.domain.BuildExecutor
 import com.seanshubin.warden.domain.Project
 import com.seanshubin.warden.exec.Exec
 import java.nio.file.Path

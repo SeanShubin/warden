@@ -1,11 +1,11 @@
 package com.seanshubin.warden.composition
 
-import com.seanshubin.warden.buildexecutor.BuildExecutor
+import com.seanshubin.warden.domain.BuildExecutor
 import com.seanshubin.warden.domain.Project
+import com.seanshubin.warden.domain.ProjectChecker
 import com.seanshubin.warden.domain.ProjectStatus
 import com.seanshubin.warden.format.DurationFormat
 import com.seanshubin.warden.parallel.ParallelExecutor
-import com.seanshubin.warden.projectchecker.ProjectChecker
 import com.seanshubin.warden.projectfinder.ProjectFinder
 import java.time.Clock
 
@@ -21,69 +21,30 @@ class Runner(
     override fun run() {
         val startMillis = clock.millis()
 
-        val projects = projectFinder.findProjects(configuration.projects)
-        val validProjects = projects.filter { it.isValid }
+        val codeProjects = projectFinder.findProjects(configuration.codeProjects)
+        val gitOnlyProjects = projectFinder.findGitOnlyProjects(configuration.gitOnlyProjects)
+
+        val allProjects = codeProjects + gitOnlyProjects
+        val validProjects = allProjects.filter { it.isValid }
 
         // Show invalid projects immediately
-        projects.filter { !it.isValid }.forEach { project ->
+        allProjects.filter { !it.isValid }.forEach { project ->
             emitLine("(invalid) ${project.path}")
             project.issues.forEach { issue ->
                 emitLine("  $issue")
             }
         }
 
-        // Process each valid project with progress messages (in parallel)
+        // Process ALL projects in parallel (both types) using polymorphism
         val results = parallelExecutor.execute(validProjects) { project ->
-            val projectStartMillis = clock.millis()
-
-            // Regenerate build
-            emitLine("regenerating: ${project.path}")
-            buildExecutor.regenerateBuilds(configuration.projectGeneratorPath, listOf(project))
-
-            // Check status with progress messages
-            emitLine("verifying: ${project.path}")
-            val status = projectChecker.checkProjects(listOf(project)).first()
-
-            // Show what checks were done based on status
-            when (status.status) {
-                is ProjectStatus.Status.BuildFailed -> {
-                    // Build failed, didn't check git
-                }
-                is ProjectStatus.Status.PendingEdits -> {
-                    // Build passed, found pending edits
-                    emitLine("edits?: ${project.path}")
-                }
-                is ProjectStatus.Status.NoUpstream -> {
-                    // Build passed, no edits, but no upstream configured
-                    emitLine("edits?: ${project.path}")
-                    emitLine("unpushed?: ${project.path}")
-                }
-                is ProjectStatus.Status.UnpushedCommits -> {
-                    // Build passed, no edits, found unpushed
-                    emitLine("edits?: ${project.path}")
-                    emitLine("unpushed?: ${project.path}")
-                }
-                is ProjectStatus.Status.Clean -> {
-                    // All checks passed
-                    emitLine("edits?: ${project.path}")
-                    emitLine("unpushed?: ${project.path}")
-                }
-            }
-
-            // Show completion status with timing
-            val projectEndMillis = clock.millis()
-            val projectDurationMillis = projectEndMillis - projectStartMillis
-            val projectDurationText = DurationFormat.milliseconds.format(projectDurationMillis)
-            val statusText = when (status.status) {
-                is ProjectStatus.Status.Clean -> "(ok)"
-                is ProjectStatus.Status.BuildFailed -> "(verify failed)"
-                is ProjectStatus.Status.PendingEdits -> "(pending edits)"
-                is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
-                is ProjectStatus.Status.NoUpstream -> "(no upstream)"
-            }
-            emitLine("$statusText ${project.path} (time: $projectDurationText)")
-
-            Triple(project, status, projectDurationText)
+            project.process(
+                configuration.projectGeneratorPath,
+                buildExecutor,
+                projectChecker,
+                clock,
+                emitLine,
+                DurationFormat.milliseconds::format
+            )
         }
 
         // Results summary

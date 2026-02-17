@@ -1,12 +1,17 @@
 {
   "baseDir": "..",
   "projectGeneratorPath": "project-generator/console/target/project-generator-console.jar",
-  "projects": [
+  "codeProjects": [
     "project-generator",
     "kotlin-reusable",
     "jvmspec",
     "code-structure",
     "inversion-guard",
     "warden"
+  ],
+  "gitOnlyProjects": [
+    "rules",
+    "rules-oop",
+    "rules-rust-bevy"
   ]
 }

@@ -1,6 +1,7 @@
 package com.seanshubin.warden.projectchecker
 
 import com.seanshubin.warden.domain.Project
+import com.seanshubin.warden.domain.ProjectChecker
 import com.seanshubin.warden.domain.ProjectStatus
 import com.seanshubin.warden.exec.Exec
 
@@ -14,6 +15,13 @@ class ProjectCheckerImpl(
         }
     }
 
+    override fun checkGitOnly(projects: List<Project>): List<ProjectStatus> {
+        val validProjects = projects.filter { it.isValid }
+        return validProjects.map { project ->
+            checkGitStatus(project)
+        }
+    }
+
     private fun checkProject(project: Project): ProjectStatus {
         // Check 1: Build verification (mvn clean verify)
         val buildResult = exec.exec(project.path, listOf("mvn", "clean", "verify"))
@@ -21,13 +29,17 @@ class ProjectCheckerImpl(
             return ProjectStatus(project.path, ProjectStatus.Status.BuildFailed(buildResult.output))
         }
 
-        // Check 2: Pending edits (uncommitted changes)
+        return checkGitStatus(project)
+    }
+
+    private fun checkGitStatus(project: Project): ProjectStatus {
+        // Check pending edits (uncommitted changes)
         val statusResult = exec.exec(project.path, listOf("git", "status", "--porcelain"))
         if (statusResult.success && statusResult.output.trim().isNotEmpty()) {
             return ProjectStatus(project.path, ProjectStatus.Status.PendingEdits)
         }
 
-        // Check 3: Unpushed commits
+        // Check unpushed commits
         val unpushedResult = exec.exec(project.path, listOf("git", "log", "@{u}..HEAD", "--oneline"))
         if (!unpushedResult.success && unpushedResult.output.contains("no upstream configured")) {
             return ProjectStatus(project.path, ProjectStatus.Status.NoUpstream)

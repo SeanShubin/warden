@@ -5,4 +5,5 @@ import java.nio.file.Path
 
 interface ProjectFinder {
     fun findProjects(projectPaths: List<Path>): List<Project>
+    fun findGitOnlyProjects(projectPaths: List<Path>): List<Project>
 }

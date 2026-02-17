@@ -17,14 +17,17 @@ class ConfigurationLoader(
         val baseDir = Paths.get(configMap["baseDir"] as String)
         val projectGeneratorPath = baseDir.resolve(configMap["projectGeneratorPath"] as String)
 
-        @Suppress("UNCHECKED_CAST")
-        val projectStrings = configMap["projects"] as List<String>
-        val projects = projectStrings.map { baseDir.resolve(it) }
+        val codeProjects = (configMap["codeProjects"] as List<*>)
+            .map { baseDir.resolve(it as String) }
+
+        val gitOnlyProjects = (configMap["gitOnlyProjects"] as List<*>)
+            .map { baseDir.resolve(it as String) }
 
         return Configuration(
             baseDir = baseDir,
             projectGeneratorPath = projectGeneratorPath,
-            projects = projects
+            codeProjects = codeProjects,
+            gitOnlyProjects = gitOnlyProjects
         )
     }
 }
