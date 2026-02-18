@@ -8,31 +8,17 @@ import com.seanshubin.warden.exec.Exec
 class ProjectCheckerImpl(
     private val exec: Exec
 ) : ProjectChecker {
-    override fun checkProjects(projects: List<Project>): List<ProjectStatus> {
-        val validProjects = projects.filter { it.isValid }
-        return validProjects.map { project ->
-            checkProject(project)
-        }
-    }
-
-    override fun checkGitOnly(projects: List<Project>): List<ProjectStatus> {
-        val validProjects = projects.filter { it.isValid }
-        return validProjects.map { project ->
-            checkGitStatus(project)
-        }
-    }
-
-    private fun checkProject(project: Project): ProjectStatus {
+    override fun verifyBuild(project: Project): ProjectStatus {
         // Check 1: Build verification (mvn clean verify)
         val buildResult = exec.execForResult(project.path, listOf("mvn", "clean", "verify"))
         if (!buildResult.success) {
             return ProjectStatus(project.path, ProjectStatus.Status.BuildFailed(buildResult.output))
         }
 
-        return checkGitStatus(project)
+        return checkGit(project)
     }
 
-    private fun checkGitStatus(project: Project): ProjectStatus {
+    override fun checkGit(project: Project): ProjectStatus {
         // Check pending edits (uncommitted changes)
         val statusResult = exec.execForResult(project.path, listOf("git", "status", "--porcelain"))
         if (statusResult.success && statusResult.output.trim().isNotEmpty()) {

@@ -10,5 +10,5 @@ interface BuildExecutor {
         val success: Boolean get() = exitCode == 0
     }
 
-    fun regenerateBuilds(projectGeneratorPath: Path, projects: List<Project>): Map<Path, Result>
+    fun regenerateBuild(projectGeneratorPath: Path, project: Project): Result
 }

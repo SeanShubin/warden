@@ -8,16 +8,9 @@ import java.nio.file.Path
 class BuildExecutorImpl(
     private val exec: Exec
 ) : BuildExecutor {
-    override fun regenerateBuilds(projectGeneratorPath: Path, projects: List<Project>): Map<Path, BuildExecutor.Result> {
-        val validProjects = projects.filter { it.isValid }
-        return validProjects.associate { project ->
-            project.path to regenerateBuild(projectGeneratorPath, project.path)
-        }
-    }
-
-    private fun regenerateBuild(projectGeneratorPath: Path, projectPath: Path): BuildExecutor.Result {
+    override fun regenerateBuild(projectGeneratorPath: Path, project: Project): BuildExecutor.Result {
         val command = listOf("java", "-jar", projectGeneratorPath.toString())
-        val execResult = exec.execForResult(projectPath, command)
+        val execResult = exec.execForResult(project.path, command)
         return BuildExecutor.Result(execResult.exitCode, execResult.output)
     }
 }
