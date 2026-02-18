@@ -8,6 +8,7 @@ data class ProjectStatus(
 ) {
     sealed class Status {
         data object Clean : Status()
+        data class GenerationFailed(val output: String) : Status()
         data class BuildFailed(val output: String) : Status()
         data object PendingEdits : Status()
         data object UnpushedCommits : Status()

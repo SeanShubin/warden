@@ -109,7 +109,7 @@
         "di-test": "di-test",
         "exec": "exec",
         "parallel": "parallel",
-        "format": "format"
+        "duration-format": "duration-format"
       }
     }
   ]

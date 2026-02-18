@@ -20,7 +20,18 @@ data class CodeProject(
 
         // Regenerate build
         emitLine("regenerating: $path")
-        buildExecutor.regenerateBuilds(projectGeneratorPath, listOf(this))
+        val generationResults = buildExecutor.regenerateBuilds(projectGeneratorPath, listOf(this))
+        val generationResult = generationResults[path]
+
+        // Check if generation succeeded
+        if (generationResult != null && !generationResult.success) {
+            val projectEndMillis = clock.millis()
+            val projectDurationMillis = projectEndMillis - projectStartMillis
+            val projectDurationText = formatDuration(projectDurationMillis)
+            val status = ProjectStatus(path, ProjectStatus.Status.GenerationFailed(generationResult.output))
+            emitLine("(generation failed) $path (time: $projectDurationText)")
+            return Triple(this, status, projectDurationText)
+        }
 
         // Check status with progress messages
         emitLine("verifying: $path")
@@ -28,6 +39,9 @@ data class CodeProject(
 
         // Show what checks were done based on status
         when (status.status) {
+            is ProjectStatus.Status.GenerationFailed -> {
+                // Generation failed, didn't check build or git
+            }
             is ProjectStatus.Status.BuildFailed -> {
                 // Build failed, didn't check git
             }
@@ -58,6 +72,7 @@ data class CodeProject(
         val projectDurationText = formatDuration(projectDurationMillis)
         val statusText = when (status.status) {
             is ProjectStatus.Status.Clean -> "(ok)"
+            is ProjectStatus.Status.GenerationFailed -> "(generation failed)"
             is ProjectStatus.Status.BuildFailed -> "(verify failed)"
             is ProjectStatus.Status.PendingEdits -> "(pending edits)"
             is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"

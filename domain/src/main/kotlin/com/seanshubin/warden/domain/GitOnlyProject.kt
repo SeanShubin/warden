@@ -24,6 +24,9 @@ data class GitOnlyProject(
 
         // Show what checks were done based on status
         when (status.status) {
+            is ProjectStatus.Status.GenerationFailed -> {
+                // Should not happen for git-only projects
+            }
             is ProjectStatus.Status.BuildFailed -> {
                 // Should not happen for git-only projects
             }
@@ -50,6 +53,7 @@ data class GitOnlyProject(
         val projectDurationText = formatDuration(projectDurationMillis)
         val statusText = when (status.status) {
             is ProjectStatus.Status.Clean -> "(ok)"
+            is ProjectStatus.Status.GenerationFailed -> "(generation failed)"
             is ProjectStatus.Status.BuildFailed -> "(verify failed)"
             is ProjectStatus.Status.PendingEdits -> "(pending edits)"
             is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"

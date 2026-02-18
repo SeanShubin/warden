@@ -53,6 +53,7 @@ class Runner(
         results.forEach { (project, status, durationText) ->
             val statusText = when (status.status) {
                 is ProjectStatus.Status.Clean -> "(ok)"
+                is ProjectStatus.Status.GenerationFailed -> "(generation failed)"
                 is ProjectStatus.Status.BuildFailed -> "(verify failed)"
                 is ProjectStatus.Status.PendingEdits -> "(pending edits)"
                 is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
