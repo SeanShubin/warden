@@ -12,6 +12,6 @@
   "gitOnlyProjects": [
     "rules",
     "rules-oop",
-    "rules-rust-bevy"
+    "rules-ecs"
   ]
 }
