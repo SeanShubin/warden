@@ -107,6 +107,11 @@ class Runner(
             is ProjectStatus.Status.NoUpstream -> "(no upstream)"
         }
         environment.emitLine("$statusText ${project.path} (time: $durationText)")
+        when (finalStatus) {
+            is ProjectStatus.Status.GenerationFailed -> finalStatus.output.lines().forEach { environment.emitLine("  $it") }
+            is ProjectStatus.Status.BuildFailed -> finalStatus.output.lines().forEach { environment.emitLine("  $it") }
+            else -> Unit
+        }
 
         return Triple(project, ProjectStatus(project.path, finalStatus), durationText)
     }
