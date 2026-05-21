@@ -6,9 +6,7 @@ data class VerifyBuildCommand(
     override fun exec(environment: CommandEnvironment): CommandResult {
         environment.emitLine("verifying: ${project.path}")
         val status = environment.projectChecker.verifyBuild(project)
-        return when (status.status) {
-            is ProjectStatus.Status.BuildFailed -> CommandResult.Stop(status.status)
-            else -> CommandResult.Continue()
-        }
+        return if (status.isClean) CommandResult.Continue()
+        else CommandResult.Stop(status.status)
     }
 }
