@@ -1,18 +1,24 @@
 package com.seanshubin.warden.projectchecker
 
+import com.seanshubin.warden.domain.FqnChecker
 import com.seanshubin.warden.domain.Project
 import com.seanshubin.warden.domain.ProjectChecker
 import com.seanshubin.warden.domain.ProjectStatus
 import com.seanshubin.warden.exec.Exec
 
 class ProjectCheckerImpl(
-    private val exec: Exec
+    private val exec: Exec,
+    private val fqnChecker: FqnChecker
 ) : ProjectChecker {
     override fun verifyBuild(project: Project): ProjectStatus {
-        // Check 1: Build verification (mvn clean verify)
         val buildResult = exec.execForResult(project.path, listOf("mvn", "clean", "verify"))
         if (!buildResult.success) {
             return ProjectStatus(project.path, ProjectStatus.Status.BuildFailed(buildResult.output))
+        }
+
+        val violations = fqnChecker.findViolations(project.path)
+        if (violations.isNotEmpty()) {
+            return ProjectStatus(project.path, ProjectStatus.Status.FqnViolationsFound(violations.joinToString("\n")))
         }
 
         return checkGit(project)

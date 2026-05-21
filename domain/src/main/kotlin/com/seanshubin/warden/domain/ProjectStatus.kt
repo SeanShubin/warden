@@ -13,6 +13,7 @@ data class ProjectStatus(
         data object PendingEdits : Status()
         data object UnpushedCommits : Status()
         data object NoUpstream : Status()
+        data class FqnViolationsFound(val output: String) : Status()
     }
 
     val isClean: Boolean get() = status is Status.Clean

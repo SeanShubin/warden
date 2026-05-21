@@ -3,8 +3,10 @@ package com.seanshubin.warden.composition
 import com.seanshubin.warden.buildexecutor.BuildExecutorImpl
 import com.seanshubin.warden.domain.BuildExecutor
 import com.seanshubin.warden.domain.CodeProject
+import com.seanshubin.warden.domain.FqnChecker
 import com.seanshubin.warden.domain.GitOnlyProject
 import com.seanshubin.warden.domain.ProjectChecker
+import com.seanshubin.warden.projectchecker.FqnCheckerImpl
 import com.seanshubin.warden.projectchecker.ProjectCheckerImpl
 import com.seanshubin.warden.projectfinder.ProjectFinder
 import com.seanshubin.warden.projectfinder.ProjectFinderImpl
@@ -25,7 +27,8 @@ class ApplicationDependencies(
         createGitOnlyProject = { path, isValid, issues -> GitOnlyProject(path, isValid, issues) }
     )
     private val buildExecutor: BuildExecutor = BuildExecutorImpl(exec)
-    private val projectChecker: ProjectChecker = ProjectCheckerImpl(exec)
+    private val fqnChecker: FqnChecker = FqnCheckerImpl()
+    private val projectChecker: ProjectChecker = ProjectCheckerImpl(exec, fqnChecker)
 
     val runner: Runnable = Runner(clock, emitLine, configuration, projectFinder, buildExecutor, projectChecker, parallelExecutor)
 

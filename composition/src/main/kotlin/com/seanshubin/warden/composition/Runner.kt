@@ -60,6 +60,7 @@ class Runner(
                 is ProjectStatus.Status.Clean -> "(ok)"
                 is ProjectStatus.Status.GenerationFailed -> "(generation failed)"
                 is ProjectStatus.Status.BuildFailed -> "(verify failed)"
+                is ProjectStatus.Status.FqnViolationsFound -> "(fqn violations found)"
                 is ProjectStatus.Status.PendingEdits -> "(pending edits)"
                 is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
                 is ProjectStatus.Status.NoUpstream -> "(no upstream)"
@@ -102,6 +103,7 @@ class Runner(
             is ProjectStatus.Status.Clean -> "(ok)"
             is ProjectStatus.Status.GenerationFailed -> "(generation failed)"
             is ProjectStatus.Status.BuildFailed -> "(verify failed)"
+            is ProjectStatus.Status.FqnViolationsFound -> "(fqn violations found)"
             is ProjectStatus.Status.PendingEdits -> "(pending edits)"
             is ProjectStatus.Status.UnpushedCommits -> "(unpushed commits)"
             is ProjectStatus.Status.NoUpstream -> "(no upstream)"
@@ -110,6 +112,7 @@ class Runner(
         when (finalStatus) {
             is ProjectStatus.Status.GenerationFailed -> finalStatus.output.lines().forEach { environment.emitLine("  $it") }
             is ProjectStatus.Status.BuildFailed -> finalStatus.output.lines().forEach { environment.emitLine("  $it") }
+            is ProjectStatus.Status.FqnViolationsFound -> finalStatus.output.lines().forEach { environment.emitLine("  $it") }
             else -> Unit
         }
 
