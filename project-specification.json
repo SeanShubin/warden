@@ -112,5 +112,6 @@
         "duration-format": "duration-format"
       }
     }
-  ]
+  ],
+  "generateCodeStructure": true
 }
