@@ -58,6 +58,8 @@
         <module>di-test</module>
         <module>exec</module>
         <module>parallel</module>
+        <module>dynamic-core</module>
+        <module>dynamic-json</module>
         <module>format</module>
     </modules>
     <properties>

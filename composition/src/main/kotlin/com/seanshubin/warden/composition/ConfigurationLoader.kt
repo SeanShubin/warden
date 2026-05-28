@@ -1,7 +1,9 @@
 package com.seanshubin.warden.composition
 
-import com.seanshubin.warden.json.mappers.JsonMappers
-import java.nio.file.Path
+import com.seanshubin.warden.dynamic.core.KeyValueStore
+import com.seanshubin.warden.dynamic.json.JsonFileKeyValueStore
+import com.seanshubin.warden.dynamic.json.loadListOrEmpty
+import com.seanshubin.warden.dynamic.json.loadStringOrDefault
 import java.nio.file.Paths
 
 class ConfigurationLoader(
@@ -11,16 +13,18 @@ class ConfigurationLoader(
     fun load(): Configuration {
         val configFileName = "$configBaseName.json"
         val configPath = Paths.get(configFileName)
-        val configText = integrations.files.readString(configPath)
-        val configMap = JsonMappers.parse<Map<String, Any>>(configText)
+        val keyValueStore: KeyValueStore = JsonFileKeyValueStore(integrations.files, configPath)
 
-        val baseDir = Paths.get(configMap["baseDir"] as String)
-        val projectGeneratorPath = baseDir.resolve(configMap["projectGeneratorPath"] as String)
-
-        val codeProjects = (configMap["codeProjects"] as List<*>)
+        val baseDir = Paths.get(keyValueStore.loadStringOrDefault(listOf("baseDir"), ".."))
+        val projectGeneratorPath = baseDir.resolve(
+            keyValueStore.loadStringOrDefault(
+                listOf("projectGeneratorPath"),
+                "project-generator/console/target/project-generator-console.jar"
+            )
+        )
+        val codeProjects = keyValueStore.loadListOrEmpty(listOf("codeProjects"))
             .map { baseDir.resolve(it as String) }
-
-        val gitOnlyProjects = (configMap["gitOnlyProjects"] as List<*>)
+        val gitOnlyProjects = keyValueStore.loadListOrEmpty(listOf("gitOnlyProjects"))
             .map { baseDir.resolve(it as String) }
 
         return Configuration(
